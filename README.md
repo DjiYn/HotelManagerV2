@@ -9,6 +9,7 @@ Required applications:
 ```
 Docker
 ```
+EDITED
 
 Used additional service from:
 https://github.com/VytenisKaj/LibraryWebService
