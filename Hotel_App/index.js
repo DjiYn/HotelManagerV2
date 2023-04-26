@@ -43,7 +43,7 @@ app.use("/books", libraryAPIRoutes);
 app.all("*", (req, res, handlers) => {
     var method = req.route.method;
     if (!(method in handlers)) {
-        res.send(501);
+        res.sendStatus(501);
     }
 })
 
