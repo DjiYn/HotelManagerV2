@@ -16,7 +16,11 @@ https://github.com/VytenisKaj/LibraryWebService
 Instructions:
 1. Clone Github repository to your [directory];
 2. cd [directory];
-3. docker-compose up [-d];
+3. Clone Github of https://github.com/VytenisKaj/LibraryWebService
+```
+git clone https://github.com/VytenisKaj/LibraryWebService
+```
+4. docker-compose up [-d];
 
 ## API
 
