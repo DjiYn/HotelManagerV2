@@ -1,0 +1,43 @@
+version: '3'
+services:
+  app:
+    container_name: hotel_manager
+    restart: always
+    build: ./Hotel_App
+    ports:
+      - '80:80'
+    links:
+      - mongo
+  mongo:
+    container_name: MongoDB
+    image: mongo:4
+    volumes:
+      - ./database:/data/db
+    ports:
+      - '27017:27017'
+    command: mongod --quiet --logpath /dev/null 
+
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "securePassw0rd"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$SA_PASSWORD" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+  library:
+    build: ./LibraryWebService
+    ports:
+      - "5000:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - default
