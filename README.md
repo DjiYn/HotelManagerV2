@@ -9,7 +9,6 @@ Required applications:
 ```
 Docker
 ```
-EDITED
 
 Used additional service from:
 https://github.com/VytenisKaj/LibraryWebService
@@ -49,6 +48,12 @@ Returns user's booked rooms by their ID.
 URI: /users/64197f89c47f17d076421261/rooms
 ```
 
+Returns user's booked books by their ID.
+
+```
+URI: /users/64197f89c47f17d076421261/books
+```
+
 #### PUT request
 
 Updates user's information.
@@ -72,6 +77,15 @@ URI: /users/64197f89c47f17d076421261/rooms
 Body:
     {
         "roomID": "643eeb9baa987d1229d8789c"
+    }
+```
+
+URI: /users/64197f89c47f17d076421261/books
+```
+
+Body:
+    {
+        "bookID": "643eeb9baa987d1229d8789c"
     }
 ```
 
@@ -101,6 +115,12 @@ Removes all booked rooms from user
 
 ```
 URI: /users/64197f89c47f17d076421261/rooms
+```
+
+Removes all booked books from user
+
+```
+URI: /users/64197f89c47f17d076421261/books
 ```
 
 ### Hotel Rooms
@@ -164,4 +184,14 @@ Deletes room from database.
 
 ```
 URI: /rooms/64197f89c47f17d076421261
+```
+
+### Books
+
+#### GET request
+
+Returns a list of all books available in database from API service.
+
+```
+URI: /books
 ```
