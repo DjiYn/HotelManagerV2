@@ -68,7 +68,6 @@ Books a room for a user.
 
 ```
 URI: /users/64197f89c47f17d076421261/rooms
-```
 
 Body:
     {
@@ -76,8 +75,11 @@ Body:
     }
 ```
 
-URI: /users/64197f89c47f17d076421261/books
+Books a book for a user.
+
 ```
+URI: /users/64197f89c47f17d076421261/books
+
 
 Body:
     {
