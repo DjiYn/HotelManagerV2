@@ -1,0 +1,3 @@
+[submodule "LibraryWebService"]
+	path = LibraryWebService
+	url = https://github.com/VytenisKaj/LibraryWebService.git
