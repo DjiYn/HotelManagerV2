@@ -14,13 +14,9 @@ Used additional service from:
 https://github.com/VytenisKaj/LibraryWebService
 
 Instructions:
-1. Clone Github repository to your [directory];
+1. Clone Github repository to your [directory] with --recursive flag to clone submodule too;
 2. cd [directory];
-3. Clone Github of https://github.com/VytenisKaj/LibraryWebService
-```
-git clone https://github.com/VytenisKaj/LibraryWebService
-```
-4. docker-compose up [-d];
+3. docker-compose up [-d];
 
 ## API
 
