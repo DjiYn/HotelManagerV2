@@ -17,7 +17,7 @@ const seedDatabase = async () => {
     try {
         await Users.deleteMany({});
         await Users.insertMany([
-            {"Name": "Jay", "Surname": "Smith" },
+            {"Name": "Jay", "Surname": "Smith", "OrderedBooks": ["1", "2"]},
             {"Name": "Will", "Surname": "Smith" },
             {"Name": "Mike", "Surname": "Walausky" }
         ]);

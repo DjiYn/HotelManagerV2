@@ -35,7 +35,7 @@ const roomRoutes = require("./routes/hotelRooms");
 app.use("/rooms", roomRoutes);
 
 const libraryAPIRoutes = require("./routes/libraryAPI");
-app.use("/books", libraryAPIRoutes);
+app.use("/libraryAPI", libraryAPIRoutes);
 
 
 

@@ -52,8 +52,15 @@ module.exports.getUser = async (req, res) => {
 
 module.exports.registerUser = async (req, res) => {
     try {
-        const {Name, Surname} = req.body;
+        const {Name, Surname, OrderedBooks} = req.body;
         const registeredUser = new Users({Name, Surname});
+        if(OrderedBooks != null)
+        {
+            let list = OrderedBooks;
+            registeredUser.OrderedBooks = [list];
+        }
+            
+
         await registeredUser.save();
         
         if(registeredUser === null || registeredUser.length === 0) {
@@ -105,7 +112,7 @@ module.exports.deleteUser = async (req, res) => {
 
             for(let usersInRoom of room.occupiedBy) {
                 if(usersInRoom != id)
-                    remainingUsers.push = usersInRoom;
+                    remainingUsers.push(usersInRoom);
             }
             room.occupiedBy = remainingUsers;
             room.lastEdited = Date.now();
@@ -205,7 +212,7 @@ module.exports.unbookRooms = async (req, res) => {
             let remainingUsers = [];
             for(let usersInRoom of room.occupiedBy) {
                 if(usersInRoom != id)
-                    remainingUsers.push = usersInRoom;
+                    remainingUsers.push(usersInRoom);
             }
             room.occupiedBy = remainingUsers;
             room.lastEdited = Date.now();
@@ -239,29 +246,34 @@ module.exports.getAllOrderedBooks = async (req, res) => {
         const {id} = req.params;
         const user = await Users.findById( id ).populate({path: 'OrderedBooks'});
 
+        if(user === null || user.length === 0) {
+            res.status(404);
+            throw new Error("User with this ID does not exist!");
+        } 
+
         let populatedData = [];
 
         for(let book of user.OrderedBooks) {
-            populatedData.push(await LibraryService.getBookById(book));
+            try {
+                populatedData.push(await LibraryService.getBookById(book));
+            } catch (e) {
+                if(e.cause == 404){
+                    res.status(404);
+                } else {
+                    res.status(503);
+                    res.set("Retry-After", 3600);
+                }
+                throw new Error(e.message);
+            }
         }
 
-        if(user === null || user.length === 0) {
-            res.status(404);
-            res.send();
-        } else {
-            res.status(200);
-            res.send(populatedData);
-        }
+
+        res.status(200);
+        res.send(populatedData);
+        
         
     } catch (e) {
-        if(e instanceof TypeError) {
-            res.status(503);
-            res.set("Retry-After", 3600);
-            res.send("This service is not available at the moment!");
-        } else {
-            res.status(400);
-            res.send(e.message);
-        }
+        res.send(e.message);
     }
 };
 
@@ -271,34 +283,42 @@ module.exports.orderBookForUser = async (req, res) => {
         const {id} = req.params;
         const user = await Users.findById( id );
 
+        if(user === null || user.length === 0) {
+            res.status(404);
+            throw new Error("User with this ID does not exist!");
+        } 
+
         const {bookID} = req.body;
 
-        if(bookID == null)
+        if(bookID == null){
+            res.status(400);
             throw new Error("bookID: user 'bookID' is required!");
+        }
+            
 
-        const bookToAdd = await LibraryService.getBookById(bookID);
+        let bookToAdd = null;
+        try {
+            bookToAdd = await LibraryService.getBookById(bookID);
+        } catch (e) {
+            if(e.cause == 404){
+                res.status(404);
+            } else {
+                res.status(503);
+                res.set("Retry-After", 3600);
+            }
+            throw new Error(e.message);
+        }
+       
 
         user.OrderedBooks.push(bookID);
         user.save();
 
-        if(user === null || user.length === 0) {
-            res.status(404);
-            res.send();
-        } else {
-            res.status(200);
-            res.set("Content-Location", req.baseUrl + "/" + id);
-            res.send(user);
-        }
+        res.status(200);
+        res.set("Content-Location", req.baseUrl + "/" + id);
+        res.send(user);
         
     } catch (e) {
-        if(e instanceof TypeError) {
-            res.status(503);
-            res.set("Retry-After", 3600);
-            res.send("This service is not available at the moment!");
-        } else {
-            res.status(400);
-            res.send(e.message);
-        }
+        res.send(e.message);
     }
 };
 
@@ -316,7 +336,7 @@ module.exports.returnAllBooksFromUser = async (req, res) => {
             res.send();
         } else {
             res.status(200);
-            res.send(user.BookedRooms);
+            res.send(user.OrderedBooks);
         }
         
     } catch (e) {

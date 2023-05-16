@@ -193,5 +193,57 @@ URI: /rooms/64197f89c47f17d076421261
 Returns a list of all books available in database from API service.
 
 ```
-URI: /books
+URI: /libraryAPI/books
+```
+
+Returns book by their ID.
+
+```
+URI: /libraryAPI/books/1
+```
+
+#### PUT request
+
+Updates books's information.
+
+```
+URI: /libraryAPI/books/1
+
+Body:
+{
+    "title": "string",
+    "isbn": "string",
+    "createdDate": "2023-05-16T19:46:52.097Z",
+    "authorId": 0,
+    "description": "string",
+    "isAvailable": true,
+    "unavailableUntil": "2023-05-16T19:46:52.097Z"
+}
+```
+
+#### POST request
+
+Adds a new book to a database.
+
+```
+URI: /libraryAPI/books/
+
+Body:
+{
+    "title": "string",
+    "isbn": "string",
+    "createdDate": "2023-05-16T19:46:52.097Z",
+    "authorId": 1,
+    "description": "string",
+    "isAvailable": true,
+    "unavailableUntil": "2023-05-16T19:46:52.097Z"
+}
+```
+
+#### DELETE request
+
+Deletes a book from database.
+
+```
+URI: /libraryAPI/books/1
 ```
